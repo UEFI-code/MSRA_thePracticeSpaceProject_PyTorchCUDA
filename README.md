@@ -10,6 +10,6 @@ Go to [The Wiki](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTor
 
 # Good news!
 
-You can try to build even you have NO GPU with my HACK!
+You can try to build the CUDA code even you have NO GPU with my HACK!
 
 Go to the myLinear\_CUDA\_backend to See Details.
