@@ -20,3 +20,17 @@ And then, you may run
 ```bash
 python3 setup.py
 ```
+
+## Hack Build Without GPU
+
+It is possible to trick the PyTorch to continue build this sorce even without GPU installed.
+
+For example on PyTorch 1.7.0,
+
+```bash
+vim /usr/local/lib/python3.8/dist-packages/torch/utils/cpp_extension.py
+```
+
+Go to line 1407, comment capability = torch.cuda.get_device_capability(), then add capability = ['7', '5+PTX'] before arch_list created.
+
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/74940000/171839610-a7618c24-387f-4d63-a8f5-c830f4025058.png">
