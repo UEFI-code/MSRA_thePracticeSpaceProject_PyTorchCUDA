@@ -11,11 +11,13 @@ sudo apt install nvidia-cuda-toolkit
 pip3 install torch==[Version]
 ```
 
-If you are using Ubuntu 20.04 LTS, the [Version] likely is 1.7.0 to suit CUDA Toolkit 10.1
+If you are using Ubuntu 20.04 LTS, the [Version] is likely 1.7.0 to suit CUDA Toolkit 10.1
 
-The Debug Log file is stored in /tmp/myLinearDbg.txt, you can change this in myLinear.cpp
+//The Debug Log file is stored in /tmp/myLinearDbg.txt, you can change this in myLinear.cpp
 
-And then, you may run
+The Cpp Debug Log will Direct Show on Screen!
+
+To buld this extensen:
 
 ```bash
 python3 setup.py

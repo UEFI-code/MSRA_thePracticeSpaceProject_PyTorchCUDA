@@ -1,6 +1,6 @@
 README.md
 myLinear.cpp
-myLinear.cu
+myLinearGPU.cu
 setup.py
 mylinear_cuda.egg-info/PKG-INFO
 mylinear_cuda.egg-info/SOURCES.txt

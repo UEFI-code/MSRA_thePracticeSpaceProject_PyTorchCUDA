@@ -41,16 +41,16 @@ Neurons = 5
 SynapseEachNeurons = 10
 BatchSize = 4
 
-weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
+weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons)).cuda()
 
 x1 = torch.ones(1, SynapseEachNeurons)
 x2 = torch.ones(1, SynapseEachNeurons) * 2
 x3 = torch.ones(1, SynapseEachNeurons) * 3
 x4 = torch.ones(1, SynapseEachNeurons) * 4
 
-x = torch.cat([x1, x2, x3, x4], 0)
+x = torch.cat([x1, x2, x3, x4], 0).cuda()
 
-y = mylinear_cuda.forward(x, weight)
+y = myLinear_cuda.forward(x, weight)
 
 print(weight)
 print(x)

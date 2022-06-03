@@ -25,7 +25,7 @@
 #include <iostream>
 #include <vector>
 
-// CUDA funciton declearition
+//CUDA funciton declearition
 std::vector<torch::Tensor> mylinear_cuda_forward(
     torch::Tensor input,
     torch::Tensor weights);
@@ -34,7 +34,6 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
     torch::Tensor grad_output,
     torch::Tensor input,
     torch::Tensor weights); 
-
 // C++ interface
 
 #define DbgFilePath "/tmp/myLinearDbg.txt"
@@ -56,19 +55,11 @@ std::vector<torch::Tensor> mylinear_forward(
     //CHECK_INPUT(input);
     //CHECK_INPUT(weights);
 
-    char *msg = (char *)malloc(512);
-    sprintf(msg, "----Timestamp %d----", time(NULL));
-    DbgPrintToFile(DbgFilePath, msg);
-    sprintf(msg, "input.size(0) = %d\n", input.size(0));
-    DbgPrintToFile(DbgFilePath, msg);
-    sprintf(msg, "input.size(1) = %d\n", input.size(1));
-    DbgPrintToFile(DbgFilePath, msg);
-    sprintf(msg, "weight.size(0) = %d\n", weight.size(0));
-    DbgPrintToFile(DbgFilePath, msg);
-    sprintf(msg, "weight.size(1) = %d\n", weight.size(1));
-    DbgPrintToFile(DbgFilePath, msg);
-    free(msg);
-    printf("Hello World");
+    printf("\n----Debug Timestamp %d----\n", time(NULL));
+    printf("input.size(0) = %d\n", input.size(0));
+    printf("input.size(1) = %d\n", input.size(1));
+    printf("weights.size(0) = %d\n", weights.size(0));
+    printf("weights.size(1) = %d\n", weights.size(1));
     return mylinear_cuda_forward(input, weights);
 }
 
