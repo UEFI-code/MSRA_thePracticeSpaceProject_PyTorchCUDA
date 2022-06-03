@@ -55,11 +55,11 @@ std::vector<torch::Tensor> mylinear_forward(
     //CHECK_INPUT(input);
     //CHECK_INPUT(weights);
 
-    printf("\n----Debug Timestamp %d----\n", time(NULL));
-    printf("input.size(0) = %d\n", input.size(0));
-    printf("input.size(1) = %d\n", input.size(1));
-    printf("weights.size(0) = %d\n", weights.size(0));
-    printf("weights.size(1) = %d\n", weights.size(1));
+    printf("\n----Debug Timestamp %ld----\n", time(NULL));
+    printf("input.size(0) = %ld\n", input.size(0));
+    printf("input.size(1) = %ld\n", input.size(1));
+    printf("weights.size(0) = %ld\n", weights.size(0));
+    printf("weights.size(1) = %ld\n", weights.size(1));
     return mylinear_cuda_forward(input, weights);
 }
 

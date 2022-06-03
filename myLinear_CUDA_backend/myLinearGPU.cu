@@ -58,6 +58,7 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     torch::Tensor input,
     torch::Tensor weights)
 {
+    printf("Here is CPU\n");
     const int M = input.size(0);
     const int K = input.size(1);
     const int N = weights.size(0);
@@ -67,18 +68,20 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     const dim3 block(32, 32);
     const dim3 grid((M - 1) / 32 + 1, (N - 1) / 32 + 1);
 
+    void *pGPU = 0;
+
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] {
-        matmul_kernel<scalar_t><<<grid, block>>>(
-            input.data<scalar_t>(),
-            weights.data<scalar_t>(),
-            output.data<scalar_t>(),
-            M,
-            K,
-            N,
-            false,
-            true);
-        }));
-    
+
+	pGPU = input.data<scalar_t>();
+	matmul_kernel<scalar_t><<<grid, block>>>(input.data<scalar_t>(), weights.data<scalar_t>(), output.data<scalar_t>(), M, K, N, false, true);
+
+	}));
+
+    float *pCPU = (float *)malloc(sizeof(float) * M * K);
+    cudaMemcpy((void *)pCPU, (void *)pGPU, sizeof(float) * M * K, cudaMemcpyDeviceToHost);
+    for(int i=0; i < M*K; i++)
+	    printf("input.data[%d] = %f\n", i, pCPU[i]);
+
     return {output};
 }
 
