@@ -2,7 +2,9 @@
 
 You need to build before try demo.py
 
-Go to the myLinear\_CUDA\_backend folder. 
+Go to the myLinear\_CUDA\_backend folder to see Detailed Build Instruction.
+
+Research.py is to Debug and Research the Code! 
 
 I'm still working to support CPU inference!
 
