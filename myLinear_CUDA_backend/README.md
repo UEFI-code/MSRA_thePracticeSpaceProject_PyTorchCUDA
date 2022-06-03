@@ -13,6 +13,8 @@ pip3 install torch==[Version]
 
 If you are using Ubuntu 20.04 LTS, the [Version] likely is 1.7.0 to suit CUDA Toolkit 10.1
 
+The Debug Log file is stored in /tmp/myLinearDbg.txt, you can change this in myLinear.cpp
+
 And then, you may run
 
 ```bash
