@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and SuperHacker UEFI.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,17 +37,37 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
 
 // C++ interface
 
+#define DbgFilePath "/tmp/myLinearDbg.txt"
 #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
 #define CHECK_CONTIGUOUS(x) TORCH_CHECK(x.is_contiguous(), #x " must be contiguous")
 #define CHECK_INPUT(x) CHECK_CUDA(x); CHECK_CONTIGUOUS(x)
+
+void DbgPrintToFile(const char *path, const char *buf)
+{
+	FILE *fp = fopen(path, "a");
+	fprintf(fp, "%s", buf);
+	fclose(fp);
+}
 
 std::vector<torch::Tensor> mylinear_forward(
     torch::Tensor input,
     torch::Tensor weights) 
 {
-    CHECK_INPUT(input);
-    CHECK_INPUT(weights);
+    //CHECK_INPUT(input);
+    //CHECK_INPUT(weights);
 
+    char *msg = (char *)malloc(512);
+    sprintf(msg, "----Timestamp %d----", time(NULL));
+    DbgPrintToFile(DbgFilePath, msg);
+    sprintf(msg, "input.size(0) = %d\n", input.size(0));
+    DbgPrintToFile(DbgFilePath, msg);
+    sprintf(msg, "input.size(1) = %d\n", input.size(1));
+    DbgPrintToFile(DbgFilePath, msg);
+    sprintf(msg, "weight.size(0) = %d\n", weight.size(0));
+    DbgPrintToFile(DbgFilePath, msg);
+    sprintf(msg, "weight.size(1) = %d\n", weight.size(1));
+    DbgPrintToFile(DbgFilePath, msg);
+    free(msg)
     return mylinear_cuda_forward(input, weights);
 }
 

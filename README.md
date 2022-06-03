@@ -2,4 +2,4 @@
 
 You need to build before try demo.py
 
-Go to the myLinear\_CUD\_backend folder. 
+Go to the myLinear\_CUDA\_backend folder. 
