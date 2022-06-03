@@ -67,7 +67,8 @@ std::vector<torch::Tensor> mylinear_forward(
     DbgPrintToFile(DbgFilePath, msg);
     sprintf(msg, "weight.size(1) = %d\n", weight.size(1));
     DbgPrintToFile(DbgFilePath, msg);
-    free(msg)
+    free(msg);
+    printf("Hello World");
     return mylinear_cuda_forward(input, weights);
 }
 
