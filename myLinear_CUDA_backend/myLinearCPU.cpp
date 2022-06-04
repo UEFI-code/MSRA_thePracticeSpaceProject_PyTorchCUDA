@@ -25,11 +25,9 @@
 
 #include <vector>
 
-void myCell_forward_kernel_cpu(int i, int j, const float* input, const float* weight, float* output, const int Neuros, const int InputDim) 
+void myCell_forward_kernel_cpu(int BatchID, int CellID, const float* input, const float* weight, float* output, const int Neuros, const int InputDim) 
 {
 	//Here InputDim == NumberOfSynapses
-	const int CellID = j;
-	const int BatchID = i;
 	const float *myWeightBase = weight + CellID * InputDim;
 	const float *myInputBase = input + BatchID * InputDim;
 	float *myOutput = output + BatchID * Neuros + CellID;
@@ -39,17 +37,16 @@ void myCell_forward_kernel_cpu(int i, int j, const float* input, const float* we
 	for(int i=0; i<InputDim; i++)
 	{
 		*myOutput += myWeightBase[i] * myInputBase[i];
+		//printf("myOutput = %f\n", *myOutput);
 	}
 
 	return;
 }
 
-void myKasoCell_backward_kernel_cpu(int i, int j, const float* input, const float* weight, float* output, const int KasoNeuros, const int InputDim)
+void myKasoCell_backward_kernel_cpu(int BatchID, int KasoCellID, const float* input, const float* weight, float* output, const int KasoNeuros, const int InputDim)
 {
 	//Here InputDim == RealCellNumber, KasoNeuros == NumberOfSynapses
-	const int KasoCellID = j;
 	//KasoCellID match RealCell's pin
-        const int BatchID = i;
 
 	const float *myInput = input + BatchID * InputDim;
 	const float *myWeight = weight + KasoCellID;
@@ -72,29 +69,25 @@ std::vector<torch::Tensor> mylinear_cpu_forward(
     const int InputDim = input.size(1);
     const int Neuros = weights.size(0);
 
-    auto output = torch::zeros({Batchsize, Neuros}, torch::TensorOptions().device(torch::kCUDA));
+    auto output = torch::zeros({Batchsize, Neuros}, torch::TensorOptions());
 
-    //void *pCPUinput = 0, *pCPUweights = 0, *pCPUoutput = 0;
-
-    //AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] { pCPUinput = input.data<scalar_t>(); pCPUweights = weights.data<scalar_t>(); pCPUoutput = output.data<scalar_t>(); }));
-    
     float *pCPUinput = input.data_ptr<float>();
     float *pCPUweights = weights.data_ptr<float>();
     float *pCPUoutput = output.data_ptr<float>();
 
+    /*
     printf("pCPUinput = 0x%x\n", pCPUinput);
-
-    if(pCPUinput == 0)
-	    exit(-1);
-
+    
     for(int i = 0; i < Batchsize * InputDim; i++)
     	printf("%f\t", pCPUinput[i]);
-    
-    while(1); //Wait for debug
+
+    printf("\n");
+    */
+    //while(1); //Wait for debug
 
     for(int i = 0; i < Batchsize; i++)
         for(int j = 0; j < Neuros; j++)
-    	    myCell_forward_kernel_cpu(i, j, (float *)pCPUinput, (float *)pCPUweights, (float *)pCPUoutput, Neuros, InputDim);
+    	    myCell_forward_kernel_cpu(i, j, pCPUinput, pCPUweights, pCPUoutput, Neuros, InputDim);
 
     return {output};
 }
@@ -108,8 +101,8 @@ std::vector<torch::Tensor> mylinear_cpu_backward(
     const int RealCellNum = grad_output.size(1);
     const int KasoCellNum = weights.size(1);
 
-    auto grad_input = torch::zeros({Batchsize, KasoCellNum}, torch::TensorOptions().device(torch::kCUDA));
-    auto grad_weights = torch::zeros({RealCellNum, KasoCellNum}, torch::TensorOptions().device(torch::kCUDA));
+    auto grad_input = torch::zeros({Batchsize, KasoCellNum}, torch::TensorOptions());
+    auto grad_weights = torch::zeros({RealCellNum, KasoCellNum}, torch::TensorOptions());
 
     float *pCPUgrad_input = grad_input.data<float>();
     float *pCPUgrad_weights = grad_weights.data<float>();
@@ -119,7 +112,7 @@ std::vector<torch::Tensor> mylinear_cpu_backward(
 
     for(int i = 0; i < Batchsize; i++)
 	for(int j = 0; j < KasoCellNum; j++)
-	    myKasoCell_backward_kernel_cpu(i, j, (float *)pCPUgrad_output, (float *)pCPUweights, (float *)pCPUgrad_input, KasoCellNum, RealCellNum);
+	    myKasoCell_backward_kernel_cpu(i, j, pCPUgrad_output, pCPUweights, pCPUgrad_input, KasoCellNum, RealCellNum);
 
     return {grad_input, grad_weights};
 }
