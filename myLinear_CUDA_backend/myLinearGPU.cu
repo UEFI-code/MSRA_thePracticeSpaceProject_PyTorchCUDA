@@ -68,19 +68,24 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     const dim3 block(32, 32);
     const dim3 grid((M - 1) / 32 + 1, (N - 1) / 32 + 1);
 
-    void *pGPU = 0;
+    void *pGPUinput = 0, *pGPUweights = 0;
 
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] {
 
-	pGPU = input.data<scalar_t>();
+	pGPUinput = input.data<scalar_t>();
+	pGPUweights = weights.data<scalar_t>();
+
 	matmul_kernel<scalar_t><<<grid, block>>>(input.data<scalar_t>(), weights.data<scalar_t>(), output.data<scalar_t>(), M, K, N, false, true);
 
 	}));
 
-    float *pCPU = (float *)malloc(sizeof(float) * M * K);
-    cudaMemcpy((void *)pCPU, (void *)pGPU, sizeof(float) * M * K, cudaMemcpyDeviceToHost);
-    for(int i=0; i < M*K; i++)
-	    printf("input.data[%d] = %f\n", i, pCPU[i]);
+    float *pCPUinput = (float *)malloc(sizeof(float) * M * K);
+    float *pCPUweights = (float *)malloc(sizeof(float) * K * N);
+    cudaMemcpy((void *)pCPUinput, (void *)pGPUinput, sizeof(float) * M * K, cudaMemcpyDeviceToHost);
+    cudaMemcpy((void *)pCPUweights, (void *)pGPUweights, sizeof(float) * K * N, cudaMemcpyDeviceToHost);
+    
+    for(int i=0; i < 30; i++)
+	    printf("input.data[%d] = %f\tweights.data[%d] = %f\n", i, pCPUinput[i], i, pCPUweights[i]);
 
     return {output};
 }
