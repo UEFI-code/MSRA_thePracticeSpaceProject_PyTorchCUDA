@@ -77,7 +77,7 @@ Neurons = 5
 SynapseEachNeurons = 10
 BatchSize = 4
 
-layer = myLinear(10, 5)
+layer = myLinear(10, 5).cpu()
 
 x1 = torch.ones(1, SynapseEachNeurons)
 x2 = torch.ones(1, SynapseEachNeurons) * 2

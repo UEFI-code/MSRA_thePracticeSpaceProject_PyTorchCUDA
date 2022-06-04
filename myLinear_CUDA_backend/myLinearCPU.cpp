@@ -78,9 +78,9 @@ std::vector<torch::Tensor> mylinear_cpu_forward(
 
     //AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] { pCPUinput = input.data<scalar_t>(); pCPUweights = weights.data<scalar_t>(); pCPUoutput = output.data<scalar_t>(); }));
     
-    float *pCPUinput = &(input.accessor<float,2>()[0][0]);
-    float *pCPUweights = &(weights.accessor<float,2>()[0][0]);
-    float *pCPUoutput = &(output.accessor<float,2>()[0][0]);
+    float *pCPUinput = input.data_ptr<float>();
+    float *pCPUweights = weights.data_ptr<float>();
+    float *pCPUoutput = output.data_ptr<float>();
 
     printf("pCPUinput = 0x%x\n", pCPUinput);
 
@@ -90,6 +90,7 @@ std::vector<torch::Tensor> mylinear_cpu_forward(
     for(int i = 0; i < Batchsize * InputDim; i++)
     	printf("%f\t", pCPUinput[i]);
     
+    while(1); //Wait for debug
 
     for(int i = 0; i < Batchsize; i++)
         for(int j = 0; j < Neuros; j++)
@@ -110,16 +111,12 @@ std::vector<torch::Tensor> mylinear_cpu_backward(
     auto grad_input = torch::zeros({Batchsize, KasoCellNum}, torch::TensorOptions().device(torch::kCUDA));
     auto grad_weights = torch::zeros({RealCellNum, KasoCellNum}, torch::TensorOptions().device(torch::kCUDA));
 
-    void *pCPUgrad_input, *pCPUgrad_weights, *pCPUgrad_output, *pCPUinput, *pCPUweights;
+    float *pCPUgrad_input = grad_input.data<float>();
+    float *pCPUgrad_weights = grad_weights.data<float>();
+    float *pCPUgrad_output = grad_output.data<float>();
+    float *pCPUinput = input.data<float>();
+    float *pCPUweights = weights.data<float>();
 
-    AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] {
-			    pCPUgrad_input = grad_input.data<scalar_t>();
-			    pCPUgrad_weights = grad_weights.data<scalar_t>();
-			    pCPUgrad_output = grad_output.data<scalar_t>();
-			    pCPUinput = input.data<scalar_t>();
-			    pCPUweights = weights.data<scalar_t>();
-			    }));
-    
     for(int i = 0; i < Batchsize; i++)
 	for(int j = 0; j < KasoCellNum; j++)
 	    myKasoCell_backward_kernel_cpu(i, j, (float *)pCPUgrad_output, (float *)pCPUweights, (float *)pCPUgrad_input, KasoCellNum, RealCellNum);
