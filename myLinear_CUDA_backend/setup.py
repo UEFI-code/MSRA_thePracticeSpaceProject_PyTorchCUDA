@@ -7,6 +7,7 @@ setup(
         CUDAExtension('myLinear_cuda', [
             'myLinear.cpp',
             'myLinearGPU.cu',
+            'myLinearCPU.cpp'
         ])
     ],
     cmdclass={

@@ -33,7 +33,18 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
 std::vector<torch::Tensor> mylinear_cuda_backward(
     torch::Tensor grad_output,
     torch::Tensor input,
-    torch::Tensor weights); 
+    torch::Tensor weights);
+
+//CPU function declarition
+std::vector<torch::Tensor> mylinear_cpu_forward(
+    torch::Tensor input,
+    torch::Tensor weights);
+
+std::vector<torch::Tensor> mylinear_cpu_backward(
+    torch::Tensor grad_output,
+    torch::Tensor input,
+    torch::Tensor weights);
+
 // C++ interface
 
 #define DbgFilePath "/tmp/myLinearDbg.txt"
@@ -56,11 +67,16 @@ std::vector<torch::Tensor> mylinear_forward(
     //CHECK_INPUT(weights);
 
     printf("\n----Debug Timestamp %ld----\n", time(NULL));
+    printf("input.type().is_cuda() = %d\n", input.type().is_cuda());
     printf("input.size(0) = %ld\n", input.size(0));
     printf("input.size(1) = %ld\n", input.size(1));
     printf("weights.size(0) = %ld\n", weights.size(0));
     printf("weights.size(1) = %ld\n", weights.size(1));
-    return mylinear_cuda_forward(input, weights);
+    
+    if(input.type().is_cuda())
+	    return mylinear_cuda_forward(input, weights);
+    else
+	    return mylinear_cpu_forward(input, weights);
 }
 
 std::vector<torch::Tensor> mylinear_backward(
@@ -68,11 +84,13 @@ std::vector<torch::Tensor> mylinear_backward(
     torch::Tensor input,
     torch::Tensor weights) 
 {
-    CHECK_INPUT(grad_output);
-    CHECK_INPUT(input);
-    CHECK_INPUT(weights);
-
-    return mylinear_cuda_backward(grad_output, input, weights);
+    //CHECK_INPUT(grad_output);
+    //CHECK_INPUT(input);
+    //CHECK_INPUT(weights);
+    if(grad_output.type().is_cuda())
+	    return mylinear_cuda_backward(grad_output, input, weights);
+    else
+	    return mylinear_cpu_backward(grad_output, input, weights);
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {

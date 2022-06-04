@@ -77,14 +77,14 @@ Neurons = 5
 SynapseEachNeurons = 10
 BatchSize = 4
 
-layer = myLinear(10, 5).cuda()
+layer = myLinear(10, 5)
 
 x1 = torch.ones(1, SynapseEachNeurons)
 x2 = torch.ones(1, SynapseEachNeurons) * 2
 x3 = torch.ones(1, SynapseEachNeurons) * 3
 x4 = torch.ones(1, SynapseEachNeurons) * 4
 
-x = torch.cat([x1, x2, x3, x4], 0).cuda()
+x = torch.cat([x1, x2, x3, x4], 0)
 
 y = layer(x)
 
@@ -94,7 +94,7 @@ print(y)
 
 L1Losser = nn.L1Loss()
 
-target = torch.ones(BatchSize, Neurons).cuda()
+target = torch.ones(BatchSize, Neurons)
 
 loss = L1Losser(y, target)
 
