@@ -1,4 +1,4 @@
-# A simple PyTorch Linear layer CUDA extensen
+# A simple but super PyTorch Linear layer CUDA extensen
 
 You need to build before try demo.py
 
