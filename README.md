@@ -16,4 +16,6 @@ Go to [The Wiki](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTor
 
 You can try to build the CUDA code even you have NO GPU with my HACK!
 
+My Cell Level Forward Available!
+
 Go to the myLinear\_CUDA\_backend to See Details.

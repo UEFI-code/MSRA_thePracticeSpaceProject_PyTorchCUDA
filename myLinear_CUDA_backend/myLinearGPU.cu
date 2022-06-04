@@ -27,31 +27,22 @@
 
 #include <vector>
 
-template <typename scalar_t>
-__global__ void matmul_kernel(
-    const scalar_t* A,
-    const scalar_t* B,
-    scalar_t* C,
-    const int M, 
-    const int K, 
-    const int N,
-    const bool trans_A = false,
-    const bool trans_B = false) 
+__global__ void cell_forward_kernel(const float* input, const float* weight, float* output, const int Neuros, const int InputDim) 
 {
-    const int row = blockIdx.x * blockDim.x + threadIdx.x;
-    const int col = blockIdx.y * blockDim.y + threadIdx.y;
-    if (row < M && col < N)
-    {
-        scalar_t sum = 0.0;
-        for (int k = 0; k < K; k++)
-        {
-            const int i = trans_A ? (k * M + row) : (row * K + k);
-            const int j = trans_B ? (col * K + k) : (k * N + col);
-            sum += A[i] * B[j];
-        }
+	const int CellID = threadIdx.x;
+	const int BatchID = blockIdx.x;
+	const float *myWeightBase = weight + CellID * InputDim;
+	const float *myInputBase = input + BatchID * InputDim;
+	float *myOutput = output + BatchID * Neuros + CellID;
+	
+	*myOutput = 0.0;
 
-        C[row * N + col]  = sum;
-    }
+	for(int i=0; i<InputDim; i++)
+	{
+		*myOutput += myWeightBase[i] * myInputBase[i];
+	}
+
+	return;
 }
 
 std::vector<torch::Tensor> mylinear_cuda_forward(
@@ -59,26 +50,17 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     torch::Tensor weights)
 {
     printf("Here is CPU\n");
-    const int M = input.size(0);
-    const int K = input.size(1);
-    const int N = weights.size(0);
+    const int Batchsize = input.size(0);
+    const int InputDim = input.size(1);
+    const int Neuros = weights.size(0);
 
-    auto output = torch::zeros({M, N}, torch::TensorOptions().device(torch::kCUDA));
+    auto output = torch::zeros({Batchsize, Neuros}, torch::TensorOptions().device(torch::kCUDA));
 
-    const dim3 block(32, 32);
-    const dim3 grid((M - 1) / 32 + 1, (N - 1) / 32 + 1);
+    void *pGPUinput = 0, *pGPUweights = 0, *pGPUoutput = 0;
 
-    void *pGPUinput = 0, *pGPUweights = 0;
+    AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] { pGPUinput = input.data<scalar_t>(); pGPUweights = weights.data<scalar_t>(); pGPUoutput = output.data<scalar_t>(); }));
 
-    AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] {
-
-	pGPUinput = input.data<scalar_t>();
-	pGPUweights = weights.data<scalar_t>();
-
-	matmul_kernel<scalar_t><<<grid, block>>>(input.data<scalar_t>(), weights.data<scalar_t>(), output.data<scalar_t>(), M, K, N, false, true);
-
-	}));
-
+    /*
     float *pCPUinput = (float *)malloc(sizeof(float) * M * K);
     float *pCPUweights = (float *)malloc(sizeof(float) * K * N);
     cudaMemcpy((void *)pCPUinput, (void *)pGPUinput, sizeof(float) * M * K, cudaMemcpyDeviceToHost);
@@ -86,6 +68,9 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     
     for(int i=0; i < 30; i++)
 	    printf("input.data[%d] = %f\tweights.data[%d] = %f\n", i, pCPUinput[i], i, pCPUweights[i]);
+    */
+
+    cell_forward_kernel<<<Batchsize, Neuros>>>((float *)pGPUinput, (float *)pGPUweights, (float *)pGPUoutput, Neuros, InputDim);
 
     return {output};
 }
@@ -106,7 +91,7 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
     const dim3 grid1((M - 1) / 32 + 1, (K - 1) / 32 + 1);
     const dim3 grid2((N - 1) / 32 + 1, (K - 1) / 32 + 1);
 
-
+/*
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_backward_input", ([&] {
         matmul_kernel<scalar_t><<<grid1, block>>>(
             grad_output.data<scalar_t>(),
@@ -130,6 +115,6 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
             true,
             false);
         }));
-    
+*/  
     return {grad_input, grad_weights};
 }
