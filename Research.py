@@ -50,7 +50,7 @@ x4 = torch.ones(1, SynapseEachNeurons) * 4
 
 x = torch.cat([x1, x2, x3, x4], 0).cuda()
 
-y = myLinear_cuda.forward(x, weight)
+y = myLinear_cuda.forward(x, weight)[0]
 
 print(weight)
 print(x)
