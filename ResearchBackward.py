@@ -58,6 +58,8 @@ class myLinearFunction(torch.autograd.Function):
         #grad_input, grad_weight = mylinear_cpp.backward(grad_output, input, weight)
         grad_input, grad_weight = myLinear_cuda.backward(grad_output, input, weight)
 
+        print(grad_input)
+
         return grad_input, grad_weight
 
 class myLinear(nn.Module):
