@@ -6,6 +6,8 @@ May show its advantage at heavy number of Neuros.
 
 The historic debug code is \*.comemorate.\* 
 
+Code proudly wroten with Vim😎
+
 ## How to Build & Install
 
 You need to have CUDA toolkit and PyTorch before build, and their version must Match.
