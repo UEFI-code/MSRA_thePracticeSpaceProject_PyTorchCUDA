@@ -58,17 +58,6 @@ std::vector<torch::Tensor> myKakuritsu_forward(
     torch::Tensor weights,
     torch::Tensor Kakuritsu) 
 {
-    //CHECK_INPUT(input);
-    //CHECK_INPUT(weights);
-    /*
-    printf("\n----Debug Timestamp %ld----\n", time(NULL));
-    printf("input.type().is_cuda() = %d\n", input.type().is_cuda());
-    printf("input.size(0) = %ld\n", input.size(0));
-    printf("input.size(1) = %ld\n", input.size(1));
-    printf("weights.size(0) = %ld\n", weights.size(0));
-    printf("weights.size(1) = %ld\n", weights.size(1));
-    */
-
     if(input.type().is_cuda())
 	    return myKakuritsu_cuda_forward(input, weights, Kakuritsu);
     else

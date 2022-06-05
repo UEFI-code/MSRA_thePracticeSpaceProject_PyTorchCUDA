@@ -47,33 +47,14 @@ std::vector<torch::Tensor> mylinear_cpu_backward(
 
 // C++ interface
 
-#define DbgFilePath "/tmp/myLinearDbg.txt"
 #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
 #define CHECK_CONTIGUOUS(x) TORCH_CHECK(x.is_contiguous(), #x " must be contiguous")
 #define CHECK_INPUT(x) CHECK_CUDA(x); CHECK_CONTIGUOUS(x)
-
-void DbgPrintToFile(const char *path, const char *buf)
-{
-	FILE *fp = fopen(path, "a");
-	fprintf(fp, "%s", buf);
-	fclose(fp);
-}
 
 std::vector<torch::Tensor> mylinear_forward(
     torch::Tensor input,
     torch::Tensor weights) 
 {
-    //CHECK_INPUT(input);
-    //CHECK_INPUT(weights);
-    /*
-    printf("\n----Debug Timestamp %ld----\n", time(NULL));
-    printf("input.type().is_cuda() = %d\n", input.type().is_cuda());
-    printf("input.size(0) = %ld\n", input.size(0));
-    printf("input.size(1) = %ld\n", input.size(1));
-    printf("weights.size(0) = %ld\n", weights.size(0));
-    printf("weights.size(1) = %ld\n", weights.size(1));
-    */
-
     if(input.type().is_cuda())
 	    return mylinear_cuda_forward(input, weights);
     else
