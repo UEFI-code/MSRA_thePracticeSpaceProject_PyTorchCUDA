@@ -2,6 +2,8 @@
 
 This is a Linear of Neuros with Kakuritsu Activation Feature.
 
+See [the wiki](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTorchCUDA/wiki/About-myKakuritsu-Activation) to learn more.
+
 Both CUDA and CPU Supported.
 
 May show its advantage at heavy number of Neuros (in CUDA).
