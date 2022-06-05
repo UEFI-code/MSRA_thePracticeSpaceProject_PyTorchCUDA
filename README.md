@@ -5,8 +5,8 @@ You need to build before try Research\*.py
 Go to:
 
 ```bash
-myLinear\_CUDA\_backend
-myKakuritsu\_Linear\_backend
+myLinear_CUDA_backend
+myKakuritsu_Linear_backend
 ```
 
 To see the detailed information and instruction.
