@@ -1,4 +1,4 @@
-# myKakuritsu Linear extensen For PyTorch
+# myKakuritsu Activation Method Linear extensen For PyTorch
 
 This is a Linear of Neuros with Kakuritsu Activation Feature.
 
