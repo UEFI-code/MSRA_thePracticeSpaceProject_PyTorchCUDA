@@ -21,7 +21,7 @@ Go to [The Wiki](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTor
 
 One Dim of CUDA blockID and threadID, Simple the MultiThread Idea.
 
-Introduce the Kakuritsu Activation to Instead Dropout (Still need more ANN Experiment). 
+Introduced the Kakuritsu Activation Method in Linear to Instead Dropout (Still need more ANN Experiment). 
 
 # Good news!
 
