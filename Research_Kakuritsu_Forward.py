@@ -35,7 +35,7 @@ import torch.nn as nn
 
 #import our cuda module
 #import mylinear_cpp
-import myKakuritsu_Linear
+import myKakuritsu_Benchmark
 
 Neurons = 5
 SynapseEachNeurons = 10
@@ -51,7 +51,7 @@ x4 = torch.ones(1, SynapseEachNeurons) * 4
 
 x = torch.cat([x1, x2, x3, x4], 0).cuda()
 
-y = myKakuritsu_Linear.forward(x, weight, Kakuritsu)[0]
+y = myKakuritsu_Benchmark.forward(x, weight, Kakuritsu)[0]
 
 print(weight)
 print(x)

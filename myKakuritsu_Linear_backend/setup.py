@@ -8,7 +8,12 @@ setup(
             'myKakuritsu.cpp',
             'myKakuritsuGPU.cu',
             'myKakuritsuCPU.cpp'
-        ])
+        ]),
+        CUDAExtension('myKakuritsu_Benchmark', [
+            'myKakuritsu_withBenchmark.cpp',
+            'myKakuritsuGPU.cu',
+            'myKakuritsuCPU.cpp'
+        ]),
     ],
     cmdclass={
         'build_ext': BuildExtension

@@ -1,9 +1,0 @@
-README.md
-myKakuritsu.cpp
-myKakuritsuCPU.cpp
-myKakuritsuGPU.cu
-setup.py
-myKakuritsu.egg-info/PKG-INFO
-myKakuritsu.egg-info/SOURCES.txt
-myKakuritsu.egg-info/dependency_links.txt
-myKakuritsu.egg-info/top_level.txt

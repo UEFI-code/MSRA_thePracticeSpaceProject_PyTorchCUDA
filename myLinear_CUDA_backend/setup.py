@@ -8,6 +8,11 @@ setup(
             'myLinear.cpp',
             'myLinearGPU.cu',
             'myLinearCPU.cpp'
+        ]),
+        CUDAExtension('myLinear_benchmark', [
+            'myLinear_withBenchmark.cpp',
+            'myLinearGPU.cu',
+            'myLinearCPU.cpp'
         ])
     ],
     cmdclass={
