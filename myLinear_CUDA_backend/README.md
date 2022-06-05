@@ -1,4 +1,4 @@
-# myLinear extensen For PyTorch
+# myLinear Extension For PyTorch
 
 This is a super Linear of Neuros.
 
