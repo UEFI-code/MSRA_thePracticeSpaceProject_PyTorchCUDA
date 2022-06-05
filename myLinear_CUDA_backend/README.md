@@ -1,8 +1,10 @@
 # myLinear extensen For PyTorch
 
-This is a super Linear layer CUDA and CPU extense for PyTorch.
+This is a super Linear of Neuros.
 
-May show its advantage at heavy number of Neuros.
+Both CUDA and CPU are supported.
+
+May show its advantage at heavy number of Neuros (In CUDA).
 
 The historic debug code is \*.comemorate.\* 
 
