@@ -65,14 +65,15 @@ std::vector<torch::Tensor> mylinear_forward(
 {
     //CHECK_INPUT(input);
     //CHECK_INPUT(weights);
-
+    /*
     printf("\n----Debug Timestamp %ld----\n", time(NULL));
     printf("input.type().is_cuda() = %d\n", input.type().is_cuda());
     printf("input.size(0) = %ld\n", input.size(0));
     printf("input.size(1) = %ld\n", input.size(1));
     printf("weights.size(0) = %ld\n", weights.size(0));
     printf("weights.size(1) = %ld\n", weights.size(1));
-    
+    */
+
     if(input.type().is_cuda())
 	    return mylinear_cuda_forward(input, weights);
     else
@@ -94,6 +95,6 @@ std::vector<torch::Tensor> mylinear_backward(
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-  m.def("forward", &mylinear_forward, "myLinear forward (CUDA)");
-  m.def("backward", &mylinear_backward, "myLinear backward (CUDA)");
+  m.def("forward", &mylinear_forward, "myLinear forward (CUDA + CPU)");
+  m.def("backward", &mylinear_backward, "myLinear backward (CUDA + CPU)");
 }

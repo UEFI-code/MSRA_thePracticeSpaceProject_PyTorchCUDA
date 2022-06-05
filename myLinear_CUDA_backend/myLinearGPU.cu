@@ -97,7 +97,6 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     torch::Tensor input,
     torch::Tensor weights)
 {
-    printf("Here is CPU\n");
     const int Batchsize = input.size(0);
     const int InputDim = input.size(1);
     const int Neuros = weights.size(0);
@@ -107,16 +106,6 @@ std::vector<torch::Tensor> mylinear_cuda_forward(
     void *pGPUinput = 0, *pGPUweights = 0, *pGPUoutput = 0;
 
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] { pGPUinput = input.data<scalar_t>(); pGPUweights = weights.data<scalar_t>(); pGPUoutput = output.data<scalar_t>(); }));
-
-    /*
-    float *pCPUinput = (float *)malloc(sizeof(float) * M * K);
-    float *pCPUweights = (float *)malloc(sizeof(float) * K * N);
-    cudaMemcpy((void *)pCPUinput, (void *)pGPUinput, sizeof(float) * M * K, cudaMemcpyDeviceToHost);
-    cudaMemcpy((void *)pCPUweights, (void *)pGPUweights, sizeof(float) * K * N, cudaMemcpyDeviceToHost);
-    
-    for(int i=0; i < 30; i++)
-	    printf("input.data[%d] = %f\tweights.data[%d] = %f\n", i, pCPUinput[i], i, pCPUweights[i]);
-    */
 
     myCell_forward_kernel<<<Batchsize, Neuros>>>((float *)pGPUinput, (float *)pGPUweights, (float *)pGPUoutput, Neuros, InputDim);
 
@@ -140,8 +129,6 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
     const dim3 grid2((RealCellNum - 1) / 32 + 1, (KasoCellNum - 1) / 32 + 1);
 
     void *pGPUgrad_input, *pGPUgrad_weights, *pGPUgrad_output, *pGPUinput, *pGPUweights;
-
-    //printf("input.size(0) = %d, input.size(1) = %d\n", input.size(0), input.size(1));
     
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_forward", ([&] {
 			    pGPUgrad_input = grad_input.data<scalar_t>();
@@ -151,35 +138,6 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
 			    pGPUweights = weights.data<scalar_t>();
 			    }));
     
-    /*
-    float *pCPUinput = (float *)malloc(sizeof(float) * input.size(0) * input.size(1));
-    float *pCPUweights = (float *)malloc(sizeof(float) * weights.size(0) * weights.size(1));
-
-    cudaMemcpy((void *)pCPUinput, (void *)pGPUinput, sizeof(float) * input.size(0) * input.size(1), cudaMemcpyDeviceToHost);
-    cudaMemcpy((void *)pCPUweights, (void *)pGPUweights, sizeof(float) * weights.size(0) * weights.size(1), cudaMemcpyDeviceToHost);
-
-    printf("\n----Dump input----\n");
-    
-    for(int i=0; i < input.size(0) * input.size(1); i++)
-	    printf("%f\t", pCPUinput[i]);
-
-    printf("\n----Dump weights----\n");
-
-    for(int i=0; i < weights.size(0) * weights.size(1); i++)
-            printf("%f\t", pCPUweights[i]);	    
-
-    AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_backward_input", ([&] {
-        ms_demo_matmul_kernel<scalar_t><<<grid1, block>>>(
-            grad_output.data<scalar_t>(),
-            weights.data<scalar_t>(),
-            grad_input.data<scalar_t>(),
-            M,
-            N,
-            K,
-            false,
-            false);
-        }));
-	*/
     myKasoCell_backward_kernel<<<Batchsize, KasoCellNum>>>((float *)pGPUgrad_output, (float *)pGPUweights, (float *)pGPUgrad_input, KasoCellNum, RealCellNum);
 
     AT_DISPATCH_FLOATING_TYPES(input.type(), "mylinear_cuda_backward_input", ([&] {
@@ -194,17 +152,5 @@ std::vector<torch::Tensor> mylinear_cuda_backward(
             false);
 
         }));
-    /*
-    float *pCPUgrad_weights = (float *)malloc(sizeof(float) * RealCellNum * KasoCellNum);
-
-    cudaMemcpy((void *)pCPUgrad_weights, (void *)pGPUgrad_weights, sizeof(float) * N * K, cudaMemcpyDeviceToHost);
-
-    printf("\n----Dump grad_weights----\n");
-
-    for(int i=0; i < N * K; i++)
-            printf("%f\t", pCPUgrad_weights[i]);
-
-    printf("\n");
-    */
     return {grad_input, grad_weights};
 }

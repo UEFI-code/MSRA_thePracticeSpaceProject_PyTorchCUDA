@@ -4,7 +4,7 @@ You need to build before try demo.py
 
 Go to the myLinear\_CUDA\_backend folder to see Detailed Build Instruction.
 
-Research.py is to Debug and Research the Code! 
+Research\*.py is to Debug and Research the Code! 
 
 # Research
 

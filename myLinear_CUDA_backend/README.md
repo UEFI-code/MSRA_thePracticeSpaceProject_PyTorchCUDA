@@ -1,6 +1,10 @@
 # myLinear extensen For PyTorch
 
-This is a easy Linear layer CUDA extense for PyTorch
+This is a super Linear layer CUDA and CPU extense for PyTorch.
+
+May show its advantage at heavy number of Neuros.
+
+The historic debug code is *.comemorate.* 
 
 ## How to Build & Install
 
