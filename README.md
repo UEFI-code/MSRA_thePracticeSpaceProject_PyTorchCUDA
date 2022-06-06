@@ -17,6 +17,8 @@ Research\*.py is to Debug and Research the Code!
 
 Go to [The Wiki](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTorchCUDA/wiki) to see Research Status.
 
+Quick Link: [My Project Report😎](https://github.com/UEFI-code/MSRA_thePracticeSpaceProject_PyTorchCUDA/wiki/Project-Report)
+
 # Innovation
 
 One Dim of CUDA blockID and threadID, Simple the MultiThread Idea.
