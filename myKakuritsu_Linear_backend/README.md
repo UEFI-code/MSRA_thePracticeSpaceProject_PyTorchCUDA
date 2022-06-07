@@ -29,10 +29,10 @@ My code is expected to work on most Version of Environment😎
 
 The Cpp Debug Log will Direct Show on Screen!
 
-To buld this extensen:
+To build this extensen:
 
 ```bash
-python3 setup.py
+python3 setup.py install
 ```
 
 ## Hack Build Without GPU
