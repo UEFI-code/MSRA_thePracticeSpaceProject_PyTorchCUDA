@@ -29,7 +29,7 @@ My code is expected to work on most Version of Environment😎
 
 The Cpp Debug Log will Direct Show on Screen!
 
-To build this extensen:
+To build this extension:
 
 ```bash
 python3 setup.py install
