@@ -37,10 +37,10 @@ import torch.nn as nn
 #import mylinear_cpp
 import myKakuritsu_Benchmark
 
-Neurons = 5
+Neurons = 500
 SynapseEachNeurons = 10
 BatchSize = 4
-UseCUDA = True
+UseCUDA = False
 epoch = 10
 
 weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))

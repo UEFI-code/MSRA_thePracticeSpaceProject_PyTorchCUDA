@@ -43,7 +43,7 @@ BatchSize = 4
 
 epoch = 10
 
-UseCUDA = False
+UseCUDA = True
 
 weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
 
