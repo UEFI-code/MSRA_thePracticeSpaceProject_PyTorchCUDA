@@ -41,7 +41,7 @@ from torch.optim.lr_scheduler import StepLR
 
 import myKakuritsu_Linear
 
-class myKakuritsuFunction(torch.autograd.Function):
+class myKakuritsu_Linear_Function(torch.autograd.Function):
     # Note that both forward and backward are @staticmethods
     @staticmethod
     def forward(ctx, input, weight, Kakuritsu):
@@ -66,9 +66,9 @@ class myKakuritsuFunction(torch.autograd.Function):
 
         return grad_input, grad_weight, grad_weight
 
-class myKakuritsu(nn.Module):
+class myKakuritsu_Linear_Obj(nn.Module):
     def __init__(self, input_features, output_features):
-        super(myKakuritsu, self).__init__()
+        super(myKakuritsu_Linear_Obj, self).__init__()
         self.input_features = input_features
         self.output_features = output_features
         self.weight = nn.Parameter(torch.Tensor(output_features, input_features))
@@ -76,7 +76,7 @@ class myKakuritsu(nn.Module):
         self.Kakuritsu = nn.Parameter(torch.ones(output_features, input_features) * 0.8)
 
     def forward(self, input):
-        return myKakuritsuFunction.apply(input, self.weight, self.Kakuritsu)
+        return myKakuritsu_Linear_Function.apply(input, self.weight, self.Kakuritsu)
 
 class Net(nn.Module):
     def __init__(self):
@@ -87,7 +87,7 @@ class Net(nn.Module):
         self.dropout2 = nn.Dropout2d(0.5)
         self.fc1 = nn.Linear(9216, 128)
         # self.fc2 = nn.Linear(128, 10)
-        self.fc2 = myKakuritsu(128, 10)
+        self.fc2 = myKakuritsu_Linear_Obj(128, 10)
 
     def forward(self, x):
         x = self.conv1(x)
