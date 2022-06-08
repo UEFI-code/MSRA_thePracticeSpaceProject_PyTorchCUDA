@@ -35,6 +35,8 @@ My Kaso Cell Backward Available!
 
 CPU Inference Available!
 
+Demo Code can run now!
+
 Almost done, need a little understand of 'grad\_weights' and Experiment Report.
 
 # Todo

@@ -39,8 +39,6 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 
-#import our cuda module
-#import mylinear_cpp
 import myLinear_cuda
 
 class myLinearFunction(torch.autograd.Function):
@@ -50,7 +48,7 @@ class myLinearFunction(torch.autograd.Function):
         ctx.save_for_backward(input, weight)
         #output = input.mm(weight.t())
         #output = mylinear_cpp.forward(input, weight)
-        output = mylinear_cuda.forward(input, weight)
+        output = myLinear_cuda.forward(input, weight)
 
         return output[0]
         
@@ -61,7 +59,7 @@ class myLinearFunction(torch.autograd.Function):
         #grad_input = grad_output.mm(weight)
         #grad_weight = grad_output.t().mm(input)
         #grad_input, grad_weight = mylinear_cpp.backward(grad_output, input, weight)
-        grad_input, grad_weight = mylinear_cuda.backward(grad_output, input, weight)
+        grad_input, grad_weight = myLinear_cuda.backward(grad_output, input, weight)
 
         return grad_input, grad_weight
 
