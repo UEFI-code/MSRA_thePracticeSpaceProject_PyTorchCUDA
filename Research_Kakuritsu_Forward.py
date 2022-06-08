@@ -40,19 +40,49 @@ import myKakuritsu_Benchmark
 Neurons = 5
 SynapseEachNeurons = 10
 BatchSize = 4
+UseCUDA = True
+epoch = 10
 
-weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons)).cuda()
-Kakuritsu = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons) * 0.8).cuda()
+weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
+Kakuritsu = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons) * 0.8)
 
 x1 = torch.ones(1, SynapseEachNeurons)
 x2 = torch.ones(1, SynapseEachNeurons) * 2
 x3 = torch.ones(1, SynapseEachNeurons) * 3
 x4 = torch.ones(1, SynapseEachNeurons) * 4
 
-x = torch.cat([x1, x2, x3, x4], 0).cuda()
+x = torch.cat([x1, x2, x3, x4], 0)
 
-y = myKakuritsu_Benchmark.forward(x, weight, Kakuritsu)[0]
+if UseCUDA:
+    weight = weight.cuda()
+    Kakuritsu = Kakuritsu.cuda()
+    x = x.cuda()
 
-print(weight)
-print(x)
-print(y)
+for i in range(epoch):
+    y = myKakuritsu_Benchmark.forward(x, weight, Kakuritsu)[0]
+
+if UseCUDA:
+    res = open('/tmp/myKakuritsu_Linear_CUDA.txt', 'r').readlines()
+    res.pop(0)
+    count = 0
+    s = 0
+    for i in res:
+        s += int(i)
+        count += 1
+
+    print('Avg CUDA forward time %.2f ms' % (s / count))
+
+else:
+    res = open('/tmp/myKakuritsu_Linear_CPU.txt', 'r').readlines()
+    res.pop(0)
+    count = 0
+    s = 0
+    for i in res:
+        s += int(i)
+        count += 1
+
+    print('Avg CPU forward time %.2f ms' % (s / count))
+
+#print(weight)
+#print(x)
+#print(y)

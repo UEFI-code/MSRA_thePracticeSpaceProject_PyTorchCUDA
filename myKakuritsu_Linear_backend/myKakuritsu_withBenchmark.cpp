@@ -61,21 +61,28 @@ std::vector<torch::Tensor> myKakuritsu_forward(
     std::vector<torch::Tensor> output;
     
     int beginTime = 0, endTime = 0;
+    FILE *fp = 0;
 
     if(input.type().is_cuda())
     {
+	fp = fopen("/tmp/myKakuritsu_Linear_CUDA.txt","a");
         beginTime = clock();
 	output = myKakuritsu_cuda_forward(input, weights, Kakuritsu);
 	endTime = clock();
 	printf("CUDA Forward spend %d ms\n", endTime - beginTime);
+	fprintf(fp, "%d\n", endTime - beginTime);
     }
     else
     {
+	fp = fopen("/tmp/myKakuritsu_Linear_CPU.txt","a");
 	beginTime = clock();
 	output = myKakuritsu_cpu_forward(input, weights, Kakuritsu);
 	endTime = clock();
 	printf("CPU Forward spend %d ms\n", endTime - beginTime);
+	fprintf(fp, "%d\n", endTime - beginTime);
     }
+
+    fclose(fp);
 
     return output;
 }

@@ -66,22 +66,29 @@ std::vector<torch::Tensor> mylinear_forward(
     std::vector<torch::Tensor> output;
     
     int timeBegin = 0, timeEnd = 0;
+    FILE *fp = 0;
 
     if(input.type().is_cuda())
     {
+	fp = fopen("/tmp/myLinear_CUDA.txt", "a");
         timeBegin = clock();
 	output = mylinear_cuda_forward(input, weights);
 	timeEnd = clock();
 	printf("CUDA Forward spend %d ms\n", timeEnd - timeBegin);
+	fprintf(fp, "%d\n", timeEnd - timeBegin);
     }
     else
     {
+	fp = fopen("/tmp/myLinear_CPU.txt", "a");
 	timeBegin = clock();
 	output = mylinear_cpu_forward(input, weights);
 	timeEnd = clock();
 	printf("CPU Forward spend %d ms\n", timeEnd - timeBegin);
+	fprintf(fp, "%d\n", timeEnd - timeBegin);
     }
     
+    fclose(fp);
+
     return output;
 }
 

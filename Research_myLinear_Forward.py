@@ -41,6 +41,10 @@ Neurons = 5
 SynapseEachNeurons = 10
 BatchSize = 4
 
+epoch = 10
+
+UseCUDA = False
+
 weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
 
 x1 = torch.ones(1, SynapseEachNeurons)
@@ -50,8 +54,35 @@ x4 = torch.ones(1, SynapseEachNeurons) * 4
 
 x = torch.cat([x1, x2, x3, x4], 0)
 
-y = myLinear_benchmark.forward(x, weight)[0]
+if UseCUDA:
+    weight = weight.cuda()
+    x = x.cuda()
 
-print(weight)
-print(x)
-print(y)
+for i in range(epoch):
+    y = myLinear_benchmark.forward(x, weight)[0]
+
+if UseCUDA:
+    res = open('/tmp/myLinear_CUDA.txt', 'r').readlines()
+    res.pop(0)
+    count = 0
+    s = 0
+    for i in res:
+        s += int(i)
+        count += 1
+    
+    print('Avg CUDA forward time %.2f ms' % (s / count))
+
+else:
+    res = open('/tmp/myLinear_CPU.txt', 'r').readlines()
+    res.pop(0)
+    count = 0
+    s = 0
+    for i in res:
+        s += int(i)
+        count += 1
+
+    print('Avg CPU forward time %.2f ms' % (s / count))
+
+#print(weight)
+#print(x)
+#print(y)
