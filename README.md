@@ -1,4 +1,4 @@
-# Simple but super PyTorch Linear layer CUDA extensen
+# Simple But Super PyTorch CUDA Extension
 
 You need to build before try Research\*.py
 
