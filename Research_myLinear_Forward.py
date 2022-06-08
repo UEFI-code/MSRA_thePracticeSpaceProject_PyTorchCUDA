@@ -36,14 +36,15 @@ import torch.nn as nn
 #import our cuda module
 #import mylinear_cpp
 import myLinear_benchmark
+import os
 
-Neurons = 5
+Neurons = 50
 SynapseEachNeurons = 10
 BatchSize = 4
 
-epoch = 10
+epoch = 100
 
-UseCUDA = True
+UseCUDA = False
 
 weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
 
@@ -57,6 +58,15 @@ x = torch.cat([x1, x2, x3, x4], 0)
 if UseCUDA:
     weight = weight.cuda()
     x = x.cuda()
+    try:
+        os.remove('/tmp/myLinear_CUDA.txt')
+    except:
+        pass
+else:
+    try:
+        os.remove('/tmp/myLinear_CPU.txt')
+    except:
+        pass
 
 for i in range(epoch):
     y = myLinear_benchmark.forward(x, weight)[0]

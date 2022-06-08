@@ -65,7 +65,7 @@ std::vector<torch::Tensor> myKakuritsu_forward(
 
     if(input.type().is_cuda())
     {
-	fp = fopen("/tmp/myKakuritsu_Linear_CUDA.txt","w");
+	fp = fopen("/tmp/myKakuritsu_Linear_CUDA.txt","a");
         beginTime = clock();
 	output = myKakuritsu_cuda_forward(input, weights, Kakuritsu);
 	endTime = clock();
@@ -74,7 +74,7 @@ std::vector<torch::Tensor> myKakuritsu_forward(
     }
     else
     {
-	fp = fopen("/tmp/myKakuritsu_Linear_CPU.txt","w");
+	fp = fopen("/tmp/myKakuritsu_Linear_CPU.txt","a");
 	beginTime = clock();
 	output = myKakuritsu_cpu_forward(input, weights, Kakuritsu);
 	endTime = clock();

@@ -32,7 +32,7 @@
 
 import torch
 import torch.nn as nn
-
+import os
 #import our cuda module
 #import mylinear_cpp
 import myKakuritsu_Benchmark
@@ -40,8 +40,8 @@ import myKakuritsu_Benchmark
 Neurons = 500
 SynapseEachNeurons = 10
 BatchSize = 4
-UseCUDA = False
-epoch = 10
+UseCUDA = True
+epoch = 100
 
 weight = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons))
 Kakuritsu = nn.Parameter(torch.randn(Neurons, SynapseEachNeurons) * 0.8)
@@ -57,6 +57,15 @@ if UseCUDA:
     weight = weight.cuda()
     Kakuritsu = Kakuritsu.cuda()
     x = x.cuda()
+    try:
+        os.remove('/tmp/myKakuritsu_Linear_CUDA.txt')
+    except:
+        pass
+else:
+    try:
+        os.remove('/tmp/myKakuritsu_Linear_CPU.txt')
+    except:
+        pass
 
 for i in range(epoch):
     y = myKakuritsu_Benchmark.forward(x, weight, Kakuritsu)[0]

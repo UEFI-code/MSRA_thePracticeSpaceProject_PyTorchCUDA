@@ -70,7 +70,7 @@ std::vector<torch::Tensor> mylinear_forward(
 
     if(input.type().is_cuda())
     {
-	fp = fopen("/tmp/myLinear_CUDA.txt", "w");
+	fp = fopen("/tmp/myLinear_CUDA.txt", "a");
         timeBegin = clock();
 	output = mylinear_cuda_forward(input, weights);
 	timeEnd = clock();
@@ -79,7 +79,7 @@ std::vector<torch::Tensor> mylinear_forward(
     }
     else
     {
-	fp = fopen("/tmp/myLinear_CPU.txt", "w");
+	fp = fopen("/tmp/myLinear_CPU.txt", "a");
 	timeBegin = clock();
 	output = mylinear_cpu_forward(input, weights);
 	timeEnd = clock();
