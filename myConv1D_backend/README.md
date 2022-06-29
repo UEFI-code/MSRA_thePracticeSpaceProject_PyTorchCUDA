@@ -1,12 +1,10 @@
-# myLinear Extension For PyTorch
+# myConv1D Extension For PyTorch
 
 This is a super Linear of Neuros.
 
 Both CUDA and CPU are supported.
 
 May show its advantage at heavy number of Neuros (In CUDA).
-
-The historic debug code is \*.comemorate.\* 
 
 Code proudly wroten with Vim😎
 
@@ -32,7 +30,7 @@ The Cpp Debug Log will Direct Show on Screen!
 To build this extension:
 
 ```bash
-python3 setup.py install
+python3 setup.py install [--user]
 ```
 
 ## Hack Build Without GPU
