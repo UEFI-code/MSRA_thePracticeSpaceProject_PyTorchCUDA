@@ -1,0 +1,9 @@
+README.md
+myCPU.cpp
+myConv1D.cpp
+myGPU.cu
+setup.py
+myConv1D.egg-info/PKG-INFO
+myConv1D.egg-info/SOURCES.txt
+myConv1D.egg-info/dependency_links.txt
+myConv1D.egg-info/top_level.txt
