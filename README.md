@@ -7,6 +7,7 @@ Go to:
 ```bash
 myLinear_CUDA_backend
 myKakuritsu_Linear_backend
+myConv1D_backend
 ```
 
 To see the detailed information and instruction.
@@ -32,6 +33,8 @@ You can try to build the CUDA code even you have NO GPU with my HACK!
 My Cell Level Forward Available!
 
 My Kaso Cell Backward Available!
+
+My Convolution 1D  Available!
 
 CPU Inference Available!
 
